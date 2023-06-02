@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from src.database import db
 from src.users.models import User
 
@@ -7,8 +8,23 @@ class UserService():
         return db.query(User).all()
 
     def create_user(self, user: User):
-        db.add(user)
-        db.commit()
+        db_user = db.query(User).filter_by(email=user.email).first()
+        print(db_user)
+        if db_user is not None:
+            raise HTTPException(
+                status_code=400, detail="User with given email already exists")
+
+        try:
+            db.add(user)
+            db.commit()
+        except:
+            db.rollback()
+            raise HTTPException(status_code=500)
+
+    def get_user(self, id: str):
+        user = db.query(User).filter(User.id == id).first()
+
+        return user
 
 
 user_service = UserService()
