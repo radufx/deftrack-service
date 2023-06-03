@@ -1,22 +1,26 @@
 from typing import List
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, status
 
+from src.records.utils import convert_record
 from src.records.schemas import Record
 from src.records.service import record_service
-from src.records import models
 
 router = APIRouter(prefix="/records", tags=["records"])
 
 
-@router.get("/{zone_id}", status_code=status.HTTP_200_OK)
-def get_zone_records(zone_id: str):
-    records = record_service.get_zone_records(zone_id)
+@router.get("/", status_code=status.HTTP_200_OK)
+def get_zone_records(zoneId: str):
+    records = record_service.get_zone_records(zoneId)
 
     return {"message": "Succesfully retrieved zone records.", "data": records}
 
 
 @router.post("/", status_code=status.HTTP_200_OK)
 def add_zone_records(records: List[Record]):
-    records = record_service.add_records(records)
+    new_records = []
+    for record in records:
+        new_records.append(convert_record(record))
 
-    return {"message": "Succesfully added records.", "data": records}
+    new_records = record_service.add_records(new_records)
+
+    return {"message": "Succesfully added records."}

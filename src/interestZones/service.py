@@ -16,7 +16,6 @@ class InterestZoneService():
 
     def add_interest_zone(self, interestZone: InterestZone):
         interestZone.id = str(uuid.uuid4())
-        print(interestZone)
         try:
             db.add(interestZone)
             db.commit()

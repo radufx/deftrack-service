@@ -5,11 +5,12 @@ from pydantic import BaseModel
 class Record(BaseModel):
     id: str
     userId: str
-    zoneID: str
+    zoneId: str
     vegetationRate: float
     timestamp: int
     image: str
-    notes: Optional[str]
+    notes: str
+    description: str
 
     class Config:
         orm_mode = True

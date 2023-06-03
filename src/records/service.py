@@ -1,29 +1,31 @@
 from fastapi import HTTPException
-import uuid
 from pyparsing import List
 
 
 from src.database import db
 from src.records.models import Record
+from src.utils.model import prediction_model
 
 
 class RecordService():
     def get_zone_records(self, zoneId: str):
         records = db.query(Record).filter_by(zoneId=zoneId)
 
-        if records is None:
+        if records.count() == 0:
             return []
 
-        return records
+        return records.all()
 
     def add_records(self, records: List[Record]):
         for record in records:
-            record.id = uuid.uuid4()
+            record.vegetationRate = prediction_model.getImageVegetationRate(
+                record.image)
 
         try:
             db.add_all(records)
             db.commit()
-        except:
+        except Exception as ex:
+            print(ex)
             db.rollback()
             raise HTTPException(status_code=500)
 

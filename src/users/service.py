@@ -9,7 +9,6 @@ class UserService():
 
     def create_user(self, user: User):
         db_user = db.query(User).filter_by(email=user.email).first()
-        print(db_user)
         if db_user is not None:
             raise HTTPException(
                 status_code=400, detail="User with given email already exists")
