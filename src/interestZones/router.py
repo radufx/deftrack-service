@@ -8,11 +8,18 @@ from src.interestZones import models
 router = APIRouter(prefix="/interest-zones", tags=["interest-zones"])
 
 
-@router.get("/{user_id}", status_code=status.HTTP_200_OK)
-def get_user_zones(user_id: str):
-    interest_zones = interest_zone_service.get_user_interest_zones(user_id)
+@router.get("/", status_code=status.HTTP_200_OK)
+def get_user_zones(userId: str):
+    interest_zones = interest_zone_service.get_user_interest_zones(userId)
 
     return {"message": "Succesfully retrieved zones.", "data": interest_zones}
+
+
+@router.get("/ids", status_code=status.HTTP_200_OK)
+def get_zone_ids():
+    ids = interest_zone_service.get_zone_ids()
+
+    return {"message": "Succesfully retrieved zones.", "data": [value for value, in ids]}
 
 
 @router.post("/", status_code=status.HTTP_200_OK)
@@ -30,3 +37,10 @@ def get_user_zones(interest_zone: UpdateInterestZoneDTO):
     interest_zone_service.update_zone_details(interest_zone)
 
     return {"message": "Succesfully updated zone."}
+
+
+@router.get("/{zone_id}", status_code=status.HTTP_200_OK)
+def get_user_zones(zone_id: str):
+    interest_zone = interest_zone_service.get_zone(zone_id)
+
+    return {"message": "Succesfully retrieved zone.", "data": interest_zone}

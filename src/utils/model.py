@@ -21,6 +21,8 @@ class PredictionModel():
     def getImageVegetationRate(self, url):
         requested_image = requests.get(url, stream=True)
         image = Image.open(requested_image.raw)
+        image = image.resize((512, 512))
+        image.show()
         image = np.array(image) / 255
         image = image.reshape(1, 512, 512, 3)
 

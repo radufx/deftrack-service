@@ -9,7 +9,8 @@ from src.utils.model import prediction_model
 
 class RecordService():
     def get_zone_records(self, zoneId: str):
-        records = db.query(Record).filter_by(zoneId=zoneId)
+        records = db.query(Record).filter_by(
+            zoneId=zoneId).order_by(Record.timestamp)
 
         if records.count() == 0:
             return []

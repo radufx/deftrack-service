@@ -14,6 +14,13 @@ class InterestZoneService():
 
         return interest_zones.all()
 
+    def get_zone_ids(self):
+        interest_zones = db.query(InterestZone.id)
+        if interest_zones.count() == 0:
+            return []
+
+        return interest_zones.all()
+
     def add_interest_zone(self, interestZone: InterestZone):
         interestZone.id = str(uuid.uuid4())
         try:
@@ -39,6 +46,12 @@ class InterestZoneService():
             print(ex)
             db.rollback()
             raise HTTPException(status_code=500)
+
+    def get_zone(self, id: str):
+        interest_zone = db.query(InterestZone).filter(
+            InterestZone.id == id).first()
+
+        return interest_zone
 
 
 interest_zone_service = InterestZoneService()
