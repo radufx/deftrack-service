@@ -7,7 +7,7 @@ class UserService():
     def get_all_users(self):
         return db.query(User).all()
 
-    def create_user(self, user: User):
+    def update_user(self, user: User):
         db_user = db.query(User).filter_by(email=user.email).first()
         if db_user is not None:
             raise HTTPException(

@@ -15,11 +15,11 @@ def get_all_users():
     return {"message": "Succesfully retrieved all users.", "data": users}
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
-def create_user(user: User):
+@router.put("/{user_id}", status_code=status.HTTP_201_CREATED)
+def update_user(user: User):
     new_user = models.User(id=user.id, email=user.email)
 
-    user_service.create_user(new_user)
+    user_service.update_user(new_user)
     return {"message": "Succesfully created user.", "data": user}
 
 

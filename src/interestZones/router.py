@@ -33,7 +33,7 @@ def add_interest_zone(interest_zone: InterestZone):
 
 
 @router.put("/{zone_id}", status_code=status.HTTP_200_OK)
-def get_user_zones(interest_zone: UpdateInterestZoneDTO):
+def update_zone(interest_zone: UpdateInterestZoneDTO):
     interest_zone_service.update_zone_details(interest_zone)
 
     return {"message": "Succesfully updated zone."}

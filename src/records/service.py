@@ -4,10 +4,13 @@ from pyparsing import List
 
 from src.database import db
 from src.records.models import Record
-from src.utils.model import prediction_model
+from src.utils.model import PredictionModel
 
 
 class RecordService():
+    def __init__(self) -> None:
+        self.__prediction_model = PredictionModel()
+
     def get_zone_records(self, zoneId: str):
         records = db.query(Record).filter_by(
             zoneId=zoneId).order_by(Record.timestamp)
@@ -19,7 +22,7 @@ class RecordService():
 
     def add_records(self, records: List[Record]):
         for record in records:
-            record.vegetationRate = prediction_model.getImageVegetationRate(
+            record.vegetationRate = self.__prediction_model.get_image_vegetation_rate(
                 record.image)
 
         try:
